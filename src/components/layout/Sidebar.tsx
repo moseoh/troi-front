@@ -51,7 +51,7 @@ export function Sidebar({ isExpanded, onToggle }: SidebarProps) {
         <BarChart3 className="h-6 w-6 flex-shrink-0 text-blue-600" />
         <span
           className={cn(
-            'ml-2 whitespace-nowrap text-xl font-semibold transition-all duration-300',
+            'ml-2 whitespace-nowrap text-xl font-semibold text-gray-900 transition-all duration-300',
             isExpanded ? 'opacity-100' : 'opacity-0 w-0 ml-0'
           )}
         >

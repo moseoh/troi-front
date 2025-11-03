@@ -293,6 +293,60 @@ export const mockTraces: AdTrace[] = [
     referrer: 'https://www.kakaocorp.com',
     landingUrl: 'https://example.com/special-offer',
   },
+  {
+    traceId: 'trace-009',
+    userId: 'user-33333',
+    sessionId: 'sess-yza567',
+    campaign: {
+      id: 'camp-003',
+      name: '인스타그램 스토리 광고',
+      source: 'instagram',
+      medium: 'cpm',
+      content: 'story-ad-002',
+    },
+    startTime: Date.now() - 14400000,
+    endTime: Date.now() - 14400000 + 38000,
+    totalDuration: 38000,
+    events: createTraceEvents(Date.now() - 14400000, true),
+    conversion: {
+      converted: true,
+      conversionValue: 98000,
+      roi: 490,
+      conversionTime: 38000,
+    },
+    deviceInfo: {
+      device: 'mobile',
+      os: 'iOS',
+      browser: 'Instagram',
+    },
+    referrer: 'https://www.instagram.com',
+    landingUrl: 'https://example.com/new-arrivals',
+  },
+  {
+    traceId: 'trace-010',
+    sessionId: 'sess-bcd890',
+    campaign: {
+      id: 'camp-007',
+      name: '트위터 프로모션',
+      source: 'twitter',
+      medium: 'cpc',
+      content: 'tweet-promo-001',
+    },
+    startTime: Date.now() - 18000000,
+    endTime: Date.now() - 18000000 + 9000,
+    totalDuration: 9000,
+    events: createTraceEvents(Date.now() - 18000000, false),
+    conversion: {
+      converted: false,
+    },
+    deviceInfo: {
+      device: 'desktop',
+      os: 'Windows',
+      browser: 'Firefox',
+    },
+    referrer: 'https://twitter.com',
+    landingUrl: 'https://example.com/twitter-special',
+  },
 ];
 
 /**
