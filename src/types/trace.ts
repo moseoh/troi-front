@@ -1,7 +1,7 @@
 /**
  * 광고 추적 이벤트 타입
  */
-export type EventType = 'click' | 'landing' | 'signup' | 'purchase' | 'view' | 'custom';
+export type EventType = 'click' | 'landing' | 'signup' | 'purchase' | 'view' | 'pageview' | 'custom';
 
 /**
  * 개별 추적 이벤트
@@ -25,6 +25,14 @@ export interface Campaign {
   medium: string;      // cpc, cpm, organic, social 등
   content?: string;    // 광고 콘텐츠 ID
   term?: string;       // 검색 키워드
+
+  // Phase 1.1: 계층 구조 추가
+  category?: string;   // 이벤트 분류 (예: "여름 프로모션", "신규 가입 이벤트")
+  platform?: string;   // 플랫폼 분류 (source를 더 명확히)
+  hierarchyLevel?: 'campaign' | 'adSet' | 'ad';  // 계층 레벨
+  parentId?: string;   // 상위 캠페인 참조
+  objective?: string;  // 캠페인 목적 (인지도, 전환, 리타겟팅)
+  targetAudience?: string;  // 타겟 오디언스 정보
 }
 
 /**
@@ -47,6 +55,28 @@ export interface DeviceInfo {
 }
 
 /**
+ * UTM 파라미터
+ */
+export interface UTMParams {
+  utm_source?: string;      // 트래픽 소스 (예: google, facebook)
+  utm_medium?: string;      // 매체 (예: cpc, email, social)
+  utm_campaign?: string;    // 캠페인 이름
+  utm_term?: string;        // 검색 키워드
+  utm_content?: string;     // 광고 콘텐츠 구분자
+}
+
+/**
+ * 유입 흐름 정보 (Phase 1.2)
+ */
+export interface ReferrerFlow {
+  sourceUrl: string;           // 이전 페이지 URL
+  destinationUrl: string;      // 현재 페이지 URL
+  utmParams?: UTMParams;       // UTM 파라미터
+  flowType: 'external' | 'internal' | 'direct';  // 유입 타입
+  timestamp: number;           // 흐름 발생 시간
+}
+
+/**
  * 광고 추적 전체 정보
  */
 export interface AdTrace {
@@ -62,6 +92,9 @@ export interface AdTrace {
   deviceInfo: DeviceInfo;
   referrer?: string;
   landingUrl: string;
+
+  // Phase 1.2: 유입 흐름 추적
+  referrerFlows?: ReferrerFlow[];  // 페이지 간 유입 흐름 정보
 }
 
 /**
