@@ -1,39 +1,36 @@
-'use client';
+'use client'
 
-import * as React from 'react';
-import { useState } from 'react';
-import { notFound, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft, CheckCircle2, XCircle, Clock, Activity, TrendingUp } from 'lucide-react';
-import { TraceTimeline } from '@/components/trace/TraceTimeline';
-import { TraceFlowDiagram } from '@/components/trace/TraceFlowDiagram';
-import { getTraceById } from '@/data';
-import { formatCurrency, formatPercent, formatDuration, getSourceLabel, getDeviceLabel } from '@/lib/utils';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import * as React from 'react'
+import { useState } from 'react'
+import { notFound, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { ArrowLeft, CheckCircle2, XCircle, Clock, Activity, TrendingUp } from 'lucide-react'
+import { TraceTimeline } from '@/components/trace/TraceTimeline'
+import { TraceFlowDiagram } from '@/components/trace/TraceFlowDiagram'
+import { getTraceById } from '@/data'
+import { formatCurrency, formatPercent, formatDuration, getSourceLabel, getDeviceLabel } from '@/lib/utils'
+import { format } from 'date-fns'
+import { ko } from 'date-fns/locale'
 
 interface TracePageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }
 
 export default function TracePage({ params }: TracePageProps) {
-  const resolvedParams = React.use(params);
-  const { id } = resolvedParams;
-  const trace = getTraceById(id);
-  const [activeTab, setActiveTab] = useState<'timeline' | 'flow' | 'events'>('timeline');
+  const resolvedParams = React.use(params)
+  const { id } = resolvedParams
+  const trace = getTraceById(id)
+  const [activeTab, setActiveTab] = useState<'timeline' | 'flow' | 'events'>('timeline')
 
   if (!trace) {
-    notFound();
+    notFound()
   }
 
   return (
     <div className="space-y-6">
       {/* 헤더 */}
       <div>
-        <Link
-          href="/traces"
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
-        >
+        <Link href="/traces" className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
           <ArrowLeft className="h-4 w-4" />
           추적 로그로 돌아가기
         </Link>
@@ -66,8 +63,7 @@ export default function TracePage({ params }: TracePageProps) {
       <div className="grid gap-4 md:grid-cols-4">
         <div className="rounded-lg border bg-white p-4">
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Clock className="h-4 w-4" />
-            총 소요 시간
+            <Clock className="h-4 w-4" />총 소요 시간
           </div>
           <div className="mt-1 text-2xl font-bold">{formatDuration(trace.totalDuration)}</div>
         </div>
@@ -94,9 +90,7 @@ export default function TracePage({ params }: TracePageProps) {
 
             <div className="rounded-lg border bg-white p-4">
               <div className="text-sm text-gray-600">ROI</div>
-              <div className="mt-1 text-2xl font-bold text-blue-600">
-                {formatPercent(trace.conversion.roi || 0)}
-              </div>
+              <div className="mt-1 text-2xl font-bold text-blue-600">{formatPercent(trace.conversion.roi || 0)}</div>
             </div>
           </>
         )}
@@ -121,9 +115,7 @@ export default function TracePage({ params }: TracePageProps) {
             <button
               onClick={() => setActiveTab('flow')}
               className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === 'flow'
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-gray-600 hover:text-gray-900'
+                activeTab === 'flow' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               유입 흐름
@@ -139,9 +131,7 @@ export default function TracePage({ params }: TracePageProps) {
               {trace.referrerFlows && trace.referrerFlows.length > 0 ? (
                 <TraceFlowDiagram traces={[trace]} />
               ) : (
-                <div className="flex h-64 items-center justify-center text-gray-500">
-                  유입 흐름 데이터가 없습니다.
-                </div>
+                <div className="flex h-64 items-center justify-center text-gray-500">유입 흐름 데이터가 없습니다.</div>
               )}
             </div>
           )}
@@ -155,7 +145,9 @@ export default function TracePage({ params }: TracePageProps) {
             <div className="space-y-3 text-sm">
               <div>
                 <div className="text-gray-600">플랫폼</div>
-                <div className="mt-1 font-medium">{trace.campaign.platform || getSourceLabel(trace.campaign.source)}</div>
+                <div className="mt-1 font-medium">
+                  {trace.campaign.platform || getSourceLabel(trace.campaign.source)}
+                </div>
               </div>
               {trace.campaign.category && (
                 <div>
@@ -241,23 +233,23 @@ export default function TracePage({ params }: TracePageProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 // React.use polyfill for older Next.js versions
 if (!('use' in React)) {
-  (React as any).use = function <T>(promise: Promise<T>): T {
+  ;(React as any).use = function <T>(promise: Promise<T>): T {
     if ((promise as any)._result !== undefined) {
-      return (promise as any)._result;
+      return (promise as any)._result
     }
     throw promise.then(
       (result: T) => {
-        (promise as any)._result = result;
+        ;(promise as any)._result = result
       },
       (error: any) => {
-        (promise as any)._result = error;
-        throw error;
+        ;(promise as any)._result = error
+        throw error
       }
-    );
-  };
+    )
+  }
 }

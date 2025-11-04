@@ -1,14 +1,9 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import {
-  BarChart3,
-  LayoutDashboard,
-  List,
-  Megaphone,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { BarChart3, LayoutDashboard, List, Megaphone } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const menuItems = [
   {
@@ -26,15 +21,15 @@ const menuItems = [
     href: '/campaigns',
     icon: Megaphone,
   },
-];
+]
 
 interface SidebarProps {
-  isExpanded: boolean;
-  onToggle: () => void;
+  isExpanded: boolean
+  onToggle: () => void
 }
 
 export function Sidebar({ isExpanded, onToggle }: SidebarProps) {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <aside
@@ -62,8 +57,8 @@ export function Sidebar({ isExpanded, onToggle }: SidebarProps) {
       {/* 네비게이션 메뉴 */}
       <nav className="flex flex-col gap-1 p-2">
         {menuItems.map((item) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
+          const isActive = pathname === item.href
+          const Icon = item.icon
 
           return (
             <Link
@@ -71,9 +66,7 @@ export function Sidebar({ isExpanded, onToggle }: SidebarProps) {
               href={item.href}
               className={cn(
                 'flex items-center overflow-hidden rounded-lg px-4 py-3 text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-blue-50 text-blue-600'
-                  : 'text-gray-700 hover:bg-gray-100'
+                isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
               )}
               title={!isExpanded ? item.title : undefined}
             >
@@ -87,22 +80,19 @@ export function Sidebar({ isExpanded, onToggle }: SidebarProps) {
                 {item.title}
               </span>
             </Link>
-          );
+          )
         })}
       </nav>
 
       {/* 하단 정보 */}
       <div className="absolute bottom-0 left-0 right-0 overflow-hidden border-t bg-gray-50 p-4">
         <div
-          className={cn(
-            'text-xs text-gray-600 transition-all duration-300',
-            isExpanded ? 'opacity-100' : 'opacity-0'
-          )}
+          className={cn('text-xs text-gray-600 transition-all duration-300', isExpanded ? 'opacity-100' : 'opacity-0')}
         >
           <div className="whitespace-nowrap font-medium">Troi v1.0.0</div>
           <div className="mt-1 whitespace-nowrap">마케팅 분석 도구</div>
         </div>
       </div>
     </aside>
-  );
+  )
 }

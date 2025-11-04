@@ -1,21 +1,26 @@
-import { AdTrace, TraceEvent, ReferrerFlow } from '@/types';
+import { AdTrace, TraceEvent, ReferrerFlow } from '@/types'
 
 /**
  * 고정 기준 타임스탬프 (hydration 오류 방지)
  * 2024년 10월 27일 기준
  */
-const BASE_TIMESTAMP = 1730000000000;
+const BASE_TIMESTAMP = 1730000000000
 
 /**
  * 샘플 추적 이벤트 생성
  * seed를 사용하여 deterministic한 값을 생성합니다
  */
-const createTraceEvents = (startTime: number, converted: boolean, eventCount: number = 3, seed: number = 0): TraceEvent[] => {
+const createTraceEvents = (
+  startTime: number,
+  converted: boolean,
+  eventCount: number = 3,
+  seed: number = 0
+): TraceEvent[] => {
   // 간단한 seeded random 함수
   const seededRandom = (s: number) => {
-    const x = Math.sin(s) * 10000;
-    return x - Math.floor(x);
-  };
+    const x = Math.sin(s) * 10000
+    return x - Math.floor(x)
+  }
 
   const events: TraceEvent[] = [
     {
@@ -26,7 +31,7 @@ const createTraceEvents = (startTime: number, converted: boolean, eventCount: nu
       metadata: {
         clickPosition: {
           x: Math.floor(seededRandom(seed + 2) * 1000),
-          y: Math.floor(seededRandom(seed + 3) * 800)
+          y: Math.floor(seededRandom(seed + 3) * 800),
         },
         adFormat: ['display', 'video', 'carousel'][Math.floor(seededRandom(seed + 4) * 3)],
       },
@@ -43,7 +48,7 @@ const createTraceEvents = (startTime: number, converted: boolean, eventCount: nu
       },
       status: 'success',
     },
-  ];
+  ]
 
   // 중간 이벤트 (view, pageview)
   for (let i = 0; i < eventCount; i++) {
@@ -57,7 +62,7 @@ const createTraceEvents = (startTime: number, converted: boolean, eventCount: nu
         timeOnPage: 2000 + seededRandom(seed + 11 + i * 2) * 3000,
       },
       status: 'success',
-    });
+    })
   }
 
   if (converted) {
@@ -85,11 +90,11 @@ const createTraceEvents = (startTime: number, converted: boolean, eventCount: nu
         },
         status: 'success',
       }
-    );
+    )
   }
 
-  return events;
-};
+  return events
+}
 
 /**
  * 유입 흐름 생성 헬퍼
@@ -105,9 +110,9 @@ const createReferrerFlows = (
 ): ReferrerFlow[] => {
   // 간단한 seeded random 함수
   const seededRandom = (s: number) => {
-    const x = Math.sin(s) * 10000;
-    return x - Math.floor(x);
-  };
+    const x = Math.sin(s) * 10000
+    return x - Math.floor(x)
+  }
 
   const flows: ReferrerFlow[] = [
     {
@@ -116,25 +121,29 @@ const createReferrerFlows = (
       flowType: 'external',
       timestamp: baseTime,
       utmParams: {
-        utm_source: sourceDomain.includes('google') ? 'google' : sourceDomain.includes('facebook') ? 'facebook' : 'other',
+        utm_source: sourceDomain.includes('google')
+          ? 'google'
+          : sourceDomain.includes('facebook')
+            ? 'facebook'
+            : 'other',
         utm_medium: 'cpc',
       },
     },
-  ];
+  ]
 
-  const paths = ['/products', '/category', '/special-offer', '/new-arrivals', '/sale', '/cart', '/checkout'];
-  let currentUrl = `https://example.com${landingPath}`;
+  const paths = ['/products', '/category', '/special-offer', '/new-arrivals', '/sale', '/cart', '/checkout']
+  let currentUrl = `https://example.com${landingPath}`
 
   for (let i = 0; i < flowCount; i++) {
-    const nextPath = paths[Math.floor(seededRandom(seed + i) * paths.length)];
-    const nextUrl = `https://example.com${nextPath}`;
+    const nextPath = paths[Math.floor(seededRandom(seed + i) * paths.length)]
+    const nextUrl = `https://example.com${nextPath}`
     flows.push({
       sourceUrl: currentUrl,
       destinationUrl: nextUrl,
       flowType: 'internal',
       timestamp: baseTime + (i + 1) * 5000,
-    });
-    currentUrl = nextUrl;
+    })
+    currentUrl = nextUrl
   }
 
   if (converted) {
@@ -144,12 +153,12 @@ const createReferrerFlows = (
         destinationUrl: 'https://example.com/checkout',
         flowType: 'internal',
         timestamp: baseTime + (flowCount + 1) * 5000,
-      });
+      })
     }
   }
 
-  return flows;
-};
+  return flows
+}
 
 /**
  * 모킹 Trace 데이터
@@ -577,48 +586,183 @@ export const mockTraces: AdTrace[] = [
     referrer: 'https://twitter.com',
     landingUrl: 'https://example.com/twitter-special',
   },
-];
+]
 
 /**
  * 추가 다양한 시나리오 데이터 생성
  * seed 기반으로 deterministic한 데이터를 생성합니다
  */
 const generateAdditionalTraces = (): AdTrace[] => {
-  const traces: AdTrace[] = [];
+  const traces: AdTrace[] = []
 
   // 간단한 seeded random 함수
   const seededRandom = (s: number) => {
-    const x = Math.sin(s) * 10000;
-    return x - Math.floor(x);
-  };
+    const x = Math.sin(s) * 10000
+    return x - Math.floor(x)
+  }
 
   // 캠페인 템플릿
   const campaigns = [
     // Google Ads
-    { id: 'camp-g001', name: '구글 검색 - 스니커즈', source: 'google', medium: 'cpc', platform: 'Google Ads', category: '일반 검색 광고', objective: '전환', targetAudience: '운동화 구매자' },
-    { id: 'camp-g002', name: '구글 디스플레이 - 리타겟팅', source: 'google', medium: 'display', platform: 'Google Display', category: '리타겟팅', objective: '전환', targetAudience: '장바구니 이탈자' },
-    { id: 'camp-g003', name: '구글 쇼핑 - 신발', source: 'google', medium: 'cpc', platform: 'Google Shopping', category: '일반 쇼핑 광고', objective: '전환', targetAudience: '신발 구매 의향자' },
-    { id: 'camp-y001', name: '유튜브 - 브랜드 인지도', source: 'youtube', medium: 'video', platform: 'YouTube Ads', category: '브랜딩', objective: '인지도', targetAudience: '전 연령층' },
+    {
+      id: 'camp-g001',
+      name: '구글 검색 - 스니커즈',
+      source: 'google',
+      medium: 'cpc',
+      platform: 'Google Ads',
+      category: '일반 검색 광고',
+      objective: '전환',
+      targetAudience: '운동화 구매자',
+    },
+    {
+      id: 'camp-g002',
+      name: '구글 디스플레이 - 리타겟팅',
+      source: 'google',
+      medium: 'display',
+      platform: 'Google Display',
+      category: '리타겟팅',
+      objective: '전환',
+      targetAudience: '장바구니 이탈자',
+    },
+    {
+      id: 'camp-g003',
+      name: '구글 쇼핑 - 신발',
+      source: 'google',
+      medium: 'cpc',
+      platform: 'Google Shopping',
+      category: '일반 쇼핑 광고',
+      objective: '전환',
+      targetAudience: '신발 구매 의향자',
+    },
+    {
+      id: 'camp-y001',
+      name: '유튜브 - 브랜드 인지도',
+      source: 'youtube',
+      medium: 'video',
+      platform: 'YouTube Ads',
+      category: '브랜딩',
+      objective: '인지도',
+      targetAudience: '전 연령층',
+    },
 
     // Naver
-    { id: 'camp-n001', name: '네이버 검색 - 노트북', source: 'naver', medium: 'cpc', platform: 'Naver Search', category: '일반 검색 광고', objective: '전환', targetAudience: '노트북 구매자' },
-    { id: 'camp-n002', name: '네이버 쇼핑 - 가전제품', source: 'naver', medium: 'cpc', platform: 'Naver Shopping', category: '일반 쇼핑 광고', objective: '전환', targetAudience: '가전 구매자' },
-    { id: 'camp-n003', name: '네이버 블로그 - 체험단', source: 'naver', medium: 'blog', platform: 'Naver Blog', category: '브랜딩', objective: '인지도', targetAudience: '블로거' },
+    {
+      id: 'camp-n001',
+      name: '네이버 검색 - 노트북',
+      source: 'naver',
+      medium: 'cpc',
+      platform: 'Naver Search',
+      category: '일반 검색 광고',
+      objective: '전환',
+      targetAudience: '노트북 구매자',
+    },
+    {
+      id: 'camp-n002',
+      name: '네이버 쇼핑 - 가전제품',
+      source: 'naver',
+      medium: 'cpc',
+      platform: 'Naver Shopping',
+      category: '일반 쇼핑 광고',
+      objective: '전환',
+      targetAudience: '가전 구매자',
+    },
+    {
+      id: 'camp-n003',
+      name: '네이버 블로그 - 체험단',
+      source: 'naver',
+      medium: 'blog',
+      platform: 'Naver Blog',
+      category: '브랜딩',
+      objective: '인지도',
+      targetAudience: '블로거',
+    },
 
     // Facebook & Instagram
-    { id: 'camp-f001', name: '페이스북 피드 - 봄 세일', source: 'facebook', medium: 'cpc', platform: 'Facebook Ads', category: '시즌 프로모션', objective: '전환', targetAudience: '30-40대' },
-    { id: 'camp-f002', name: '페이스북 동영상 - 신제품', source: 'facebook', medium: 'video', platform: 'Facebook Ads', category: '신상품 출시', objective: '브랜딩', targetAudience: '전 연령층' },
-    { id: 'camp-i001', name: '인스타 스토리 - 패션', source: 'instagram', medium: 'cpm', platform: 'Instagram Ads', category: '신상품 출시', objective: '브랜딩', targetAudience: '20-30대 여성' },
-    { id: 'camp-i002', name: '인스타 릴스 - 뷰티', source: 'instagram', medium: 'video', platform: 'Instagram Ads', category: '일반 소셜 광고', objective: '전환', targetAudience: '20-30대' },
+    {
+      id: 'camp-f001',
+      name: '페이스북 피드 - 봄 세일',
+      source: 'facebook',
+      medium: 'cpc',
+      platform: 'Facebook Ads',
+      category: '시즌 프로모션',
+      objective: '전환',
+      targetAudience: '30-40대',
+    },
+    {
+      id: 'camp-f002',
+      name: '페이스북 동영상 - 신제품',
+      source: 'facebook',
+      medium: 'video',
+      platform: 'Facebook Ads',
+      category: '신상품 출시',
+      objective: '브랜딩',
+      targetAudience: '전 연령층',
+    },
+    {
+      id: 'camp-i001',
+      name: '인스타 스토리 - 패션',
+      source: 'instagram',
+      medium: 'cpm',
+      platform: 'Instagram Ads',
+      category: '신상품 출시',
+      objective: '브랜딩',
+      targetAudience: '20-30대 여성',
+    },
+    {
+      id: 'camp-i002',
+      name: '인스타 릴스 - 뷰티',
+      source: 'instagram',
+      medium: 'video',
+      platform: 'Instagram Ads',
+      category: '일반 소셜 광고',
+      objective: '전환',
+      targetAudience: '20-30대',
+    },
 
     // Kakao
-    { id: 'camp-k001', name: '카카오톡 배너', source: 'kakao', medium: 'display', platform: 'Kakao Ads', category: '일반 디스플레이 광고', objective: '전환', targetAudience: '30-40대' },
-    { id: 'camp-k002', name: '카카오 비즈보드', source: 'kakao', medium: 'display', platform: 'Kakao Biz', category: '브랜딩', objective: '인지도', targetAudience: '전 연령층' },
+    {
+      id: 'camp-k001',
+      name: '카카오톡 배너',
+      source: 'kakao',
+      medium: 'display',
+      platform: 'Kakao Ads',
+      category: '일반 디스플레이 광고',
+      objective: '전환',
+      targetAudience: '30-40대',
+    },
+    {
+      id: 'camp-k002',
+      name: '카카오 비즈보드',
+      source: 'kakao',
+      medium: 'display',
+      platform: 'Kakao Biz',
+      category: '브랜딩',
+      objective: '인지도',
+      targetAudience: '전 연령층',
+    },
 
     // Twitter & TikTok
-    { id: 'camp-t001', name: '트위터 프로모션', source: 'twitter', medium: 'cpc', platform: 'Twitter Ads', category: '일반 소셜 광고', objective: '인지도', targetAudience: '20-30대' },
-    { id: 'camp-tt001', name: '틱톡 인피드', source: 'tiktok', medium: 'video', platform: 'TikTok Ads', category: '신상품 출시', objective: '브랜딩', targetAudience: '10-20대' },
-  ];
+    {
+      id: 'camp-t001',
+      name: '트위터 프로모션',
+      source: 'twitter',
+      medium: 'cpc',
+      platform: 'Twitter Ads',
+      category: '일반 소셜 광고',
+      objective: '인지도',
+      targetAudience: '20-30대',
+    },
+    {
+      id: 'camp-tt001',
+      name: '틱톡 인피드',
+      source: 'tiktok',
+      medium: 'video',
+      platform: 'TikTok Ads',
+      category: '신상품 출시',
+      objective: '브랜딩',
+      targetAudience: '10-20대',
+    },
+  ]
 
   const devices = [
     { device: 'mobile', os: 'iOS', browser: 'Safari' },
@@ -626,7 +770,7 @@ const generateAdditionalTraces = (): AdTrace[] => {
     { device: 'desktop', os: 'Windows', browser: 'Chrome' },
     { device: 'desktop', os: 'macOS', browser: 'Safari' },
     { device: 'tablet', os: 'iOS', browser: 'Safari' },
-  ];
+  ]
 
   const referrers = {
     google: 'https://www.google.com/search',
@@ -637,26 +781,28 @@ const generateAdditionalTraces = (): AdTrace[] => {
     kakao: 'https://www.kakaocorp.com',
     twitter: 'https://twitter.com',
     tiktok: 'https://www.tiktok.com',
-  };
+  }
 
-  const landingPaths = ['/sale', '/new-arrivals', '/products', '/special-offer', '/category', '/summer-collection'];
+  const landingPaths = ['/sale', '/new-arrivals', '/products', '/special-offer', '/category', '/summer-collection']
 
   // 60개의 추가 trace 생성
   for (let i = 0; i < 60; i++) {
-    const campaign = campaigns[i % campaigns.length];
-    const device = devices[i % devices.length];
-    const converted = seededRandom(1000 + i) > 0.6; // 40% 전환율
-    const timeOffset = 3600000 * (i + 1); // 시간 차이 부여
-    const startTime = BASE_TIMESTAMP - timeOffset;
-    const duration = converted ? 20000 + seededRandom(2000 + i) * 30000 : 3000 + seededRandom(3000 + i) * 10000;
-    const endTime = startTime + duration;
-    const eventCount = converted ? 3 + Math.floor(seededRandom(4000 + i) * 3) : 1 + Math.floor(seededRandom(5000 + i) * 2);
+    const campaign = campaigns[i % campaigns.length]
+    const device = devices[i % devices.length]
+    const converted = seededRandom(1000 + i) > 0.6 // 40% 전환율
+    const timeOffset = 3600000 * (i + 1) // 시간 차이 부여
+    const startTime = BASE_TIMESTAMP - timeOffset
+    const duration = converted ? 20000 + seededRandom(2000 + i) * 30000 : 3000 + seededRandom(3000 + i) * 10000
+    const endTime = startTime + duration
+    const eventCount = converted
+      ? 3 + Math.floor(seededRandom(4000 + i) * 3)
+      : 1 + Math.floor(seededRandom(5000 + i) * 2)
 
-    const conversionValue = converted ? 30000 + Math.floor(seededRandom(6000 + i) * 150000) : undefined;
-    const roi = converted && conversionValue ? Math.floor((conversionValue / 20000) * 100) : undefined;
+    const conversionValue = converted ? 30000 + Math.floor(seededRandom(6000 + i) * 150000) : undefined
+    const roi = converted && conversionValue ? Math.floor((conversionValue / 20000) * 100) : undefined
 
-    const landingPath = landingPaths[i % landingPaths.length];
-    const referrer = referrers[campaign.source as keyof typeof referrers] || 'https://www.google.com';
+    const landingPath = landingPaths[i % landingPaths.length]
+    const referrer = referrers[campaign.source as keyof typeof referrers] || 'https://www.google.com'
 
     const trace: AdTrace = {
       traceId: `trace-${String(i + 11).padStart(3, '0')}`,
@@ -681,45 +827,55 @@ const generateAdditionalTraces = (): AdTrace[] => {
       deviceInfo: device,
       referrer,
       landingUrl: `https://example.com${landingPath}`,
-      referrerFlows: converted || seededRandom(7000 + i) > 0.5 ? createReferrerFlows(referrer, landingPath, converted, 2 + Math.floor(seededRandom(8000 + i) * 3), startTime, 200 + i) : undefined,
-    };
+      referrerFlows:
+        converted || seededRandom(7000 + i) > 0.5
+          ? createReferrerFlows(
+              referrer,
+              landingPath,
+              converted,
+              2 + Math.floor(seededRandom(8000 + i) * 3),
+              startTime,
+              200 + i
+            )
+          : undefined,
+    }
 
-    traces.push(trace);
+    traces.push(trace)
   }
 
-  return traces;
-};
+  return traces
+}
 
 // 기존 데이터와 생성된 데이터를 합침
-mockTraces.push(...generateAdditionalTraces());
+mockTraces.push(...generateAdditionalTraces())
 
 /**
  * Trace ID로 특정 Trace 조회
  */
 export const getTraceById = (traceId: string): AdTrace | undefined => {
-  return mockTraces.find(trace => trace.traceId === traceId);
-};
+  return mockTraces.find((trace) => trace.traceId === traceId)
+}
 
 /**
  * 필터링된 Trace 목록 조회
  */
 export const getFilteredTraces = (filters?: {
-  campaignId?: string;
-  source?: string;
-  converted?: boolean;
+  campaignId?: string
+  source?: string
+  converted?: boolean
 }): AdTrace[] => {
-  if (!filters) return mockTraces;
+  if (!filters) return mockTraces
 
-  return mockTraces.filter(trace => {
+  return mockTraces.filter((trace) => {
     if (filters.campaignId && trace.campaign.id !== filters.campaignId) {
-      return false;
+      return false
     }
     if (filters.source && trace.campaign.source !== filters.source) {
-      return false;
+      return false
     }
     if (filters.converted !== undefined && trace.conversion.converted !== filters.converted) {
-      return false;
+      return false
     }
-    return true;
-  });
-};
+    return true
+  })
+}

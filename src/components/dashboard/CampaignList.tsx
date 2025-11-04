@@ -1,9 +1,9 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { CampaignStats } from '@/types';
-import { formatCurrency, formatNumber, formatPercent, getRoiColorClass } from '@/lib/utils';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { CampaignStats } from '@/types'
+import { formatCurrency, formatNumber, formatPercent, getRoiColorClass } from '@/lib/utils'
 
 interface CampaignListProps {
-  campaigns: CampaignStats[];
+  campaigns: CampaignStats[]
 }
 
 export function CampaignList({ campaigns }: CampaignListProps) {
@@ -31,9 +31,7 @@ export function CampaignList({ campaigns }: CampaignListProps) {
                 <tr key={campaign.campaignId} className="border-b last:border-0">
                   <td className="py-3 font-medium">{campaign.campaignName}</td>
                   <td className="py-3">
-                    <span className="rounded-full bg-gray-100 px-2 py-1 text-xs">
-                      {campaign.source}
-                    </span>
+                    <span className="rounded-full bg-gray-100 px-2 py-1 text-xs">{campaign.source}</span>
                   </td>
                   <td className="py-3 text-right">{formatNumber(campaign.clicks)}</td>
                   <td className="py-3 text-right">{formatNumber(campaign.conversions)}</td>
@@ -49,5 +47,5 @@ export function CampaignList({ campaigns }: CampaignListProps) {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
