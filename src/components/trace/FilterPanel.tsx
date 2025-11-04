@@ -1,33 +1,49 @@
-'use client';
+'use client'
 
-import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, X } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react'
+import { ChevronDown, X } from 'lucide-react'
 
 export interface FilterOptions {
-  platforms: string[];
-  categories: string[];
-  converted?: 'all' | 'converted' | 'not_converted';
+  platforms: string[]
+  categories: string[]
+  converted?: 'all' | 'converted' | 'not_converted'
   dateRange?: {
-    start: string;
-    end: string;
-  };
+    start: string
+    end: string
+  }
   roiRange?: {
-    min: number;
-    max: number;
-  };
+    min: number
+    max: number
+  }
 }
 
 interface FilterPanelProps {
-  filters: FilterOptions;
-  onFilterChange: (filters: FilterOptions) => void;
-  availablePlatforms?: string[];
-  availableCategories?: string[];
+  filters: FilterOptions
+  onFilterChange: (filters: FilterOptions) => void
+  availablePlatforms?: string[]
+  availableCategories?: string[]
 }
 
-const DEFAULT_PLATFORMS = ['Google Ads', 'Naver Shopping', 'Facebook Ads', 'Instagram Ads', 'YouTube Ads', 'Kakao Ads', 'Twitter Ads'];
-const DEFAULT_CATEGORIES = ['시즌 프로모션', '신상품 출시', '일반 검색 광고', '일반 쇼핑 광고', '일반 동영상 광고', '일반 디스플레이 광고', '일반 소셜 광고'];
+const DEFAULT_PLATFORMS = [
+  'Google Ads',
+  'Naver Shopping',
+  'Facebook Ads',
+  'Instagram Ads',
+  'YouTube Ads',
+  'Kakao Ads',
+  'Twitter Ads',
+]
+const DEFAULT_CATEGORIES = [
+  '시즌 프로모션',
+  '신상품 출시',
+  '일반 검색 광고',
+  '일반 쇼핑 광고',
+  '일반 동영상 광고',
+  '일반 디스플레이 광고',
+  '일반 소셜 광고',
+]
 
-type DropdownType = 'platforms' | 'categories' | 'converted' | 'dateRange' | 'roiRange' | null;
+type DropdownType = 'platforms' | 'categories' | 'converted' | 'dateRange' | 'roiRange' | null
 
 export function FilterPanel({
   filters,
@@ -35,39 +51,39 @@ export function FilterPanel({
   availablePlatforms = DEFAULT_PLATFORMS,
   availableCategories = DEFAULT_CATEGORIES,
 }: FilterPanelProps) {
-  const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [openDropdown, setOpenDropdown] = useState<DropdownType>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   // 외부 클릭 감지
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setOpenDropdown(null);
+        setOpenDropdown(null)
       }
-    };
+    }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const handlePlatformToggle = (platform: string) => {
     const newPlatforms = filters.platforms.includes(platform)
-      ? filters.platforms.filter(p => p !== platform)
-      : [...filters.platforms, platform];
-    onFilterChange({ ...filters, platforms: newPlatforms });
-  };
+      ? filters.platforms.filter((p) => p !== platform)
+      : [...filters.platforms, platform]
+    onFilterChange({ ...filters, platforms: newPlatforms })
+  }
 
   const handleCategoryToggle = (category: string) => {
     const newCategories = filters.categories.includes(category)
-      ? filters.categories.filter(c => c !== category)
-      : [...filters.categories, category];
-    onFilterChange({ ...filters, categories: newCategories });
-  };
+      ? filters.categories.filter((c) => c !== category)
+      : [...filters.categories, category]
+    onFilterChange({ ...filters, categories: newCategories })
+  }
 
   const handleConversionChange = (converted: 'all' | 'converted' | 'not_converted') => {
-    onFilterChange({ ...filters, converted });
-    setOpenDropdown(null);
-  };
+    onFilterChange({ ...filters, converted })
+    setOpenDropdown(null)
+  }
 
   const handleDateRangeChange = (field: 'start' | 'end', value: string) => {
     onFilterChange({
@@ -76,8 +92,8 @@ export function FilterPanel({
         start: field === 'start' ? value : filters.dateRange?.start || '',
         end: field === 'end' ? value : filters.dateRange?.end || '',
       },
-    });
-  };
+    })
+  }
 
   const handleRoiRangeChange = (field: 'min' | 'max', value: number) => {
     onFilterChange({
@@ -86,8 +102,8 @@ export function FilterPanel({
         min: field === 'min' ? value : filters.roiRange?.min || 0,
         max: field === 'max' ? value : filters.roiRange?.max || 1000,
       },
-    });
-  };
+    })
+  }
 
   const handleReset = () => {
     onFilterChange({
@@ -96,49 +112,45 @@ export function FilterPanel({
       converted: 'all',
       dateRange: undefined,
       roiRange: undefined,
-    });
-    setOpenDropdown(null);
-  };
+    })
+    setOpenDropdown(null)
+  }
 
   const toggleDropdown = (dropdown: DropdownType) => {
-    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
-  };
+    setOpenDropdown(openDropdown === dropdown ? null : dropdown)
+  }
 
   const getFilterLabel = (type: DropdownType): string => {
     switch (type) {
       case 'platforms':
-        return filters.platforms.length > 0
-          ? `플랫폼 (${filters.platforms.length})`
-          : '플랫폼';
+        return filters.platforms.length > 0 ? `플랫폼 (${filters.platforms.length})` : '플랫폼'
       case 'categories':
-        return filters.categories.length > 0
-          ? `카테고리 (${filters.categories.length})`
-          : '카테고리';
+        return filters.categories.length > 0 ? `카테고리 (${filters.categories.length})` : '카테고리'
       case 'converted':
-        if (filters.converted === 'converted') return '전환 완료';
-        if (filters.converted === 'not_converted') return '전환 미완료';
-        return '전환 여부';
+        if (filters.converted === 'converted') return '전환 완료'
+        if (filters.converted === 'not_converted') return '전환 미완료'
+        return '전환 여부'
       case 'dateRange':
         if (filters.dateRange?.start || filters.dateRange?.end) {
-          return `날짜: ${filters.dateRange.start || '시작'} ~ ${filters.dateRange.end || '종료'}`;
+          return `날짜: ${filters.dateRange.start || '시작'} ~ ${filters.dateRange.end || '종료'}`
         }
-        return '날짜 범위';
+        return '날짜 범위'
       case 'roiRange':
         if (filters.roiRange?.min || filters.roiRange?.max) {
-          return `ROI: ${filters.roiRange.min || 0}% ~ ${filters.roiRange.max || 1000}%`;
+          return `ROI: ${filters.roiRange.min || 0}% ~ ${filters.roiRange.max || 1000}%`
         }
-        return 'ROI 범위';
+        return 'ROI 범위'
       default:
-        return '';
+        return ''
     }
-  };
+  }
 
   const activeFilterCount =
     filters.platforms.length +
     filters.categories.length +
     (filters.converted !== 'all' ? 1 : 0) +
     (filters.dateRange?.start || filters.dateRange?.end ? 1 : 0) +
-    (filters.roiRange?.min || filters.roiRange?.max ? 1 : 0);
+    (filters.roiRange?.min || filters.roiRange?.max ? 1 : 0)
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -411,5 +423,5 @@ export function FilterPanel({
         )}
       </div>
     </div>
-  );
+  )
 }

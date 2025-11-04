@@ -1,10 +1,10 @@
-import { AdTrace, TraceEvent } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { formatDuration, getEventTypeLabel, getDeviceLabel, getSourceLabel } from '@/lib/utils';
+import { AdTrace, TraceEvent } from '@/types'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { formatDuration, getEventTypeLabel, getDeviceLabel, getSourceLabel } from '@/lib/utils'
 
 interface TraceDetailsProps {
-  trace: AdTrace;
-  selectedEvent: TraceEvent | null;
+  trace: AdTrace
+  selectedEvent: TraceEvent | null
 }
 
 export function TraceDetails({ trace, selectedEvent }: TraceDetailsProps) {
@@ -36,8 +36,8 @@ export function TraceDetails({ trace, selectedEvent }: TraceDetailsProps) {
                     selectedEvent.status === 'success'
                       ? 'bg-green-100 text-green-800'
                       : selectedEvent.status === 'failed'
-                      ? 'bg-red-100 text-red-800'
-                      : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-yellow-100 text-yellow-800'
                   }`}
                 >
                   {selectedEvent.status === 'success' ? '성공' : selectedEvent.status === 'failed' ? '실패' : '진행중'}
@@ -48,9 +48,7 @@ export function TraceDetails({ trace, selectedEvent }: TraceDetailsProps) {
             <div>
               <div className="text-sm text-gray-600">메타데이터</div>
               <div className="mt-2 rounded bg-gray-50 p-3">
-                <pre className="text-xs">
-                  {JSON.stringify(selectedEvent.metadata, null, 2)}
-                </pre>
+                <pre className="text-xs">{JSON.stringify(selectedEvent.metadata, null, 2)}</pre>
               </div>
             </div>
           </div>
@@ -107,5 +105,5 @@ export function TraceDetails({ trace, selectedEvent }: TraceDetailsProps) {
         )}
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,13 +1,13 @@
-import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { AdTrace } from '@/types';
-import { formatDuration, getDeviceLabel, getSourceLabel } from '@/lib/utils';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import Link from 'next/link'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { AdTrace } from '@/types'
+import { formatDuration, getDeviceLabel, getSourceLabel } from '@/lib/utils'
+import { format } from 'date-fns'
+import { ko } from 'date-fns/locale'
+import { CheckCircle2, XCircle } from 'lucide-react'
 
 interface RecentTracesProps {
-  traces: AdTrace[];
+  traces: AdTrace[]
 }
 
 export function RecentTraces({ traces }: RecentTracesProps) {
@@ -58,5 +58,5 @@ export function RecentTraces({ traces }: RecentTracesProps) {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

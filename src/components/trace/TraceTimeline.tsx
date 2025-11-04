@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { AdTrace, TraceEvent } from '@/types';
-import { TraceNode } from './TraceNode';
-import { TraceDetails } from './TraceDetails';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { formatDuration } from '@/lib/utils';
+import { useState } from 'react'
+import { AdTrace, TraceEvent } from '@/types'
+import { TraceNode } from './TraceNode'
+import { TraceDetails } from './TraceDetails'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { formatDuration } from '@/lib/utils'
 
 interface TraceTimelineProps {
-  trace: AdTrace;
+  trace: AdTrace
 }
 
 export function TraceTimeline({ trace }: TraceTimelineProps) {
-  const [selectedEvent, setSelectedEvent] = useState<TraceEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<TraceEvent | null>(null)
 
   return (
     <div className="grid gap-6 lg:grid-cols-3">
@@ -79,5 +79,5 @@ export function TraceTimeline({ trace }: TraceTimelineProps) {
         <TraceDetails trace={trace} selectedEvent={selectedEvent} />
       </div>
     </div>
-  );
+  )
 }
